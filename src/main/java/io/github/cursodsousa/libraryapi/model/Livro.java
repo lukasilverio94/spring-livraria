@@ -33,10 +33,8 @@ public class Livro {
     @Column(name = "preco", precision = 18, scale = 2, nullable = false)
     private BigDecimal preco;
 
-    // Relacionamento com Autor
-    // Primeiro (Many) se refere a Entidade Atual (Livros) e One se referece a outra (Autor).
-    @ManyToOne // muitos livros para um autor
-    @JoinColumn(name = "id_author")
+    @ManyToOne
+    @JoinColumn(name = "id_autor")
     private Autor autor;
 
 }
