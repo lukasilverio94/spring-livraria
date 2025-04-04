@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +33,12 @@ public class Autor {
 
     // Relacao com Livros. Um autor pode ter muitos livros, entao:
     // Primeiro (One) se refere a Entidade atual (Autor) e Many a Livro.
-    @OneToMany(mappedBy = "autor") // "mappedBy" vai dizer que nao tem essa coluna aqui, apenas mapeamento
-    private List<Livro> livros;
+    @OneToMany(mappedBy = "autor", orphanRemoval = true)
+    private List<Livro> livros = new ArrayList<>();
 
 
+    public void adicionarLivro(Livro livro) {
+        livros.add(livro);
+        livro.setAutor(this);
+    }
 }
