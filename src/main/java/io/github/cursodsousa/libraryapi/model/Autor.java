@@ -6,15 +6,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "autor", schema = "public") // public é o default pro schema
+@Table(name = "autor")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "livros")
 public class Autor {
 
     @Id
@@ -33,12 +32,8 @@ public class Autor {
 
     // Relacao com Livros. Um autor pode ter muitos livros, entao:
     // Primeiro (One) se refere a Entidade atual (Autor) e Many a Livro.
-    @OneToMany(mappedBy = "autor", orphanRemoval = true)
-    private List<Livro> livros = new ArrayList<>();
+    // @OneToMany por padrao tem  fetch = "FetchType.LAZY"
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    private List<Livro> livros;
 
-
-    public void adicionarLivro(Livro livro) {
-        livros.add(livro);
-        livro.setAutor(this);
-    }
 }
