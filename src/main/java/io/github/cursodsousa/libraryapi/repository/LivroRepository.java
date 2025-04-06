@@ -29,4 +29,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     // select * from livro where data_publicacao between ? and ?
     List<Livro> findByDataPublicacaoBetween(LocalDate inicio, LocalDate fim);
+
+    List<Livro> findByTituloEndingWithIgnoreCase(String titulo);
+
 }

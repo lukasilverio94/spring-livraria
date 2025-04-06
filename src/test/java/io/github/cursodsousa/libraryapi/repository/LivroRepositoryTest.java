@@ -6,9 +6,11 @@ import io.github.cursodsousa.libraryapi.model.Livro;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -21,7 +23,7 @@ class LivroRepositoryTest {
     AutorRepository autorRepository;
 
     @Test
-    void salvarTest(){
+    void salvarTest() {
         Livro livro = new Livro();
         livro.setIsbn("90887-84874");
         livro.setPreco(BigDecimal.valueOf(100));
@@ -39,7 +41,7 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void salvarAutorELivroTest(){
+    void salvarAutorELivroTest() {
         Livro livro = new Livro();
         livro.setIsbn("90887-84874");
         livro.setPreco(BigDecimal.valueOf(100));
@@ -60,7 +62,7 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void salvarCascadeTest(){
+    void salvarCascadeTest() {
         Livro livro = new Livro();
         livro.setIsbn("90887-84874");
         livro.setPreco(BigDecimal.valueOf(100));
@@ -79,8 +81,8 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void atualizarAutorDoLivro(){
-        UUID id = UUID.fromString("606cdb63-6dc3-4003-b9e6-f923cd176237");
+    void atualizarAutorDoLivro() {
+        UUID id = UUID.fromString("2230ee89-d961-4d24-a073-df3315ee7202");
         var livroParaAtualizar = livroRepository.findById(id).orElse(null);
 
         UUID idAutor = UUID.fromString("358b6d41-9b48-40a5-a8ac-24e40d1bf873");
@@ -90,18 +92,63 @@ class LivroRepositoryTest {
         livroRepository.save(livroParaAtualizar);
     }
 
+
     @Test
-    void deletar(){
-        UUID id = UUID.fromString("cfbc87ce-5932-4792-bff0-78ef5973861b");
+    void deletar() {
+        UUID id = UUID.fromString("2230ee89-d961-4d24-a073-df3315ee7202");
         livroRepository.deleteById(id);
     }
 
     @Test
-    void deletarCascade(){
-        UUID id = UUID.fromString("22238c02-8118-45ba-a9f0-202dfc3acc67");
+    void deletarCascade() {
+        UUID id = UUID.fromString("2230ee89-d961-4d24-a073-df3315ee7202");
         livroRepository.deleteById(id);
     }
 
+    @Test
+    @Transactional
+    void buscarLivroTest() {
+        UUID id = UUID.fromString("606cdb63-6dc3-4003-b9e6-f923cd176237");
+        Livro livro = livroRepository.findById(id).orElse(null);
+        System.out.println("Livro:");
+        System.out.println(livro.getTitulo());
+        System.out.println("Autor:");
+        System.out.println(livro.getAutor().getNome());
+    }
 
+    @Test
+    void pesquisaPorTituloTest() {
+        List<Livro> lista = livroRepository.findByTitulo("Entendendo Algoritmos");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorISBNTest() {
+        List<Livro> lista = livroRepository.findByIsbn("9837737-84874");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorTituloEPrecoTest() {
+        var preco = BigDecimal.valueOf(100.00);
+        var tituloPesquisa = "Entendendo Algoritmos";
+        List<Livro> lista = livroRepository.findByTituloAndPreco(tituloPesquisa, preco);
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorTituloOuIsbn() {
+        var tituloPesquisa = "";
+        var isbn = "9837737-84874";
+        List<Livro> lista = livroRepository.findByTituloOrIsbn(tituloPesquisa, isbn);
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorTituloEndingWithTest() {
+        var tituloPesquisa = "algoritmos";
+        List<Livro> lista = livroRepository.findByTituloEndingWithIgnoreCase(tituloPesquisa);
+        lista.forEach(System.out::println);
+    }
 
 }
