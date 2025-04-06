@@ -151,4 +151,42 @@ class LivroRepositoryTest {
         lista.forEach(System.out::println);
     }
 
+    // ########## JPQL @Query Tests ###################
+    @Test
+    void listarLivrosComQueryJPQL(){
+        var resultado = livroRepository.listarLivrosOrdenadoPorTituloAndPreco();
+        resultado.forEach(System.out::println);
+    }
+
+    // Testando JOIN com JPQL
+    @Test
+    void listarAutoresDosLivros(){
+        var resultado = livroRepository.listarAutoresDosLivros();
+        resultado.forEach(System.out::println);
+    }
+    /* QUERY METHODS */
+    @Test
+    void listarDistinctTitulosLivros(){
+        var resultado = livroRepository.listarNomesDiferentesLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarGenerosDeLivrosAutoresBrasileiros(){
+        var resultado = livroRepository.listarGenerosAutoresBrasileiros();
+        resultado.forEach(System.out::println);
+    }
+
+    /* QUERY PARAMETERS , NAMED and POSITIONAL */
+    @Test
+    void listarPorGeneroQueryNamedParameters(){
+        var resultado = livroRepository.findByGeneroNamedParameters(GeneroLivro.PROGRAMACAO, "preco");
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarPorGeneroQueryPositionalParameters(){
+        var resultado = livroRepository.findByGeneroPositionalParameters(GeneroLivro.PROGRAMACAO, "preco");
+        resultado.forEach(System.out::println);
+    }
 }

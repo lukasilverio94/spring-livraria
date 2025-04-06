@@ -1,14 +1,20 @@
 package io.github.cursodsousa.libraryapi.repository;
 
 import io.github.cursodsousa.libraryapi.model.Autor;
+import io.github.cursodsousa.libraryapi.model.GeneroLivro;
 import io.github.cursodsousa.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @see LivroRepositoryTest
+ */
 public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     // Query Method -> usar findByNomeDaPropriedade em CaseAssim.
@@ -32,4 +38,44 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
     List<Livro> findByTituloEndingWithIgnoreCase(String titulo);
 
+    // ########## JPQL @Query ###################
+    // JPQL -> Referencia as entidades e as propriedades
+    @Query("select l from Livro as l order by l.titulo, l.preco")
+    List<Livro> listarLivrosOrdenadoPorTituloAndPreco();
+
+    /* JOIN IN JPQL
+    select a.*
+    from livro l
+    join autor a on a.id = l.id_autor
+     */
+    @Query("select a from Livro l join l.autor a")
+    List<Autor> listarAutoresDosLivros();
+
+    /* select distinct l.* from livro l */
+    @Query("select distinct l.titulo from Livro l")
+    List<String> listarNomesDiferentesLivros();
+
+    /* Uma query maior do que uma linha (usar 3 aspas duplas, pra abrir e fechar) */
+    @Query("""
+                   select l.genero
+                   from Livro l
+                   join l.autor a
+                   where a.nacionalidade = 'Brasileira'
+                   order by l.genero
+            """)
+    List<String> listarGenerosAutoresBrasileiros();
+
+    /* ****************************************************************************/
+    /* @Query com Parametros */
+
+    /* Named Parameters -> Parametros nomeados */
+    @Query("select l from Livro l where l.genero = :genero order by :paramOrdenacao")
+    List<Livro> findByGeneroNamedParameters(
+            @Param("genero") GeneroLivro generoLivro,
+            @Param("paramOrdenacao") String nomePropriedade
+    );
+
+    /* Positional Parameteres*/
+    @Query("select l from Livro l where l.genero = ?1 order by ?2")
+    List<Livro> findByGeneroPositionalParameters(GeneroLivro generoLivro, String nomePropriedade);
 }
