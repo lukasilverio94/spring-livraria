@@ -69,7 +69,6 @@ public class AutorController {
         Optional<Autor> autorOptional = service.obterPorId(idAutor);
         if (autorOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
-
         }
         service.deletarPorId(autorOptional.get());
         return ResponseEntity.noContent().build();
@@ -90,5 +89,26 @@ public class AutorController {
                         autor.getNacionalidade())
                 ).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> atualizar(
+            @PathVariable String id,
+            @RequestBody AutorDTO dto) {
+
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+        if (autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // get autor que encontrou no banco da lógica acima
+        var autor = autorOptional.get();
+        autor.setNome(dto.nome());
+        autor.setNacionalidade(dto.nacionalidade());
+        autor.setDataNascimento(dto.dataNascimento());
+        service.atualizar(autor);
+
+        return ResponseEntity.noContent().build();
     }
 }
