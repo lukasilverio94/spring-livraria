@@ -9,6 +9,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+  #   ddl-auto: update
+      ddl-auto: none # com none temos controle total (podendo dar sql comandos manuais)
     properties:
       hibernate.format_sql: true
