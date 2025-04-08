@@ -1,4 +1,4 @@
-package io.github.cursodsousa.libraryapi.entities;
+package io.github.cursodsousa.libraryapi.service;
 
 import io.github.cursodsousa.libraryapi.model.Autor;
 import io.github.cursodsousa.libraryapi.model.GeneroLivro;
