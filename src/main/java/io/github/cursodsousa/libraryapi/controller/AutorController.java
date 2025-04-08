@@ -2,11 +2,9 @@ package io.github.cursodsousa.libraryapi.controller;
 
 import io.github.cursodsousa.libraryapi.dto.AutorDTO;
 import io.github.cursodsousa.libraryapi.model.Autor;
-import io.github.cursodsousa.libraryapi.repository.AutorRepository;
 import io.github.cursodsousa.libraryapi.service.AutorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -21,12 +19,9 @@ import java.util.stream.Collectors;
 public class AutorController {
 
     private final AutorService service;
-    private final AutorRepository autorRepository;
 
-    public AutorController(AutorService service,
-                           AutorRepository autorRepository) {
+    public AutorController(AutorService service) {
         this.service = service;
-        this.autorRepository = autorRepository;
     }
 
     @PostMapping
