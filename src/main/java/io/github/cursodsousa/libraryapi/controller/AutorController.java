@@ -2,6 +2,7 @@ package io.github.cursodsousa.libraryapi.controller;
 
 import io.github.cursodsousa.libraryapi.dto.AutorDTO;
 import io.github.cursodsousa.libraryapi.model.Autor;
+import io.github.cursodsousa.libraryapi.repository.AutorRepository;
 import io.github.cursodsousa.libraryapi.service.AutorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,12 @@ import java.util.UUID;
 public class AutorController {
 
     private final AutorService service;
+    private final AutorRepository autorRepository;
 
-    public AutorController(AutorService service) {
+    public AutorController(AutorService service,
+                           AutorRepository autorRepository) {
         this.service = service;
+        this.autorRepository = autorRepository;
     }
 
     @PostMapping
@@ -56,4 +60,15 @@ public class AutorController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable String id) {
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+        if (autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+
+        }
+        service.deletarPorId(autorOptional.get());
+        return ResponseEntity.noContent().build();
+    }
 }
