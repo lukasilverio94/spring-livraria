@@ -40,9 +40,11 @@ public class Autor {
 
     // Relacao com Livros. Um autor pode ter muitos livros, entao:
     // Primeiro (One) se refere a Entidade atual (Autor) e Many a Livro.
-    // @OneToMany por padrao tem  fetch = "FetchType.LAZY"
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    @OneToMany(//cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY,
+            mappedBy = "autor")
     private List<Livro> livros;
+    // @OneToMany por padrao tem  fetch = "FetchType.LAZY"
 
     @CreatedDate
     @Column(name = "data_cadastro")

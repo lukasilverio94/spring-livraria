@@ -19,6 +19,7 @@ import java.util.UUID;
  */
 public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
+
     // Query Method -> usar findByNomeDaPropriedade em CaseAssim.
     // select * from livro where id_autor = ?
     List<Livro> findByAutor(Autor autor);
@@ -93,5 +94,8 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     @Transactional
     @Query("update Livro set dataPublicacao = ?1")
     void updateDataPublicacao(LocalDate novaData);
+    /* ****************************************************************************/
 
+    // Checar se existe livro com esse autor
+    boolean existsByAutor(Autor autor);
 }
