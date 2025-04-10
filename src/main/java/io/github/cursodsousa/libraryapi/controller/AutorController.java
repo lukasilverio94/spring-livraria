@@ -86,7 +86,7 @@ public class AutorController {
             @RequestParam(value = "nome", required = false) String nome, // required false porque somente um dos dois é opcional
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade
     ) {
-        List<Autor> resultado = service.pesquisa(nome, nacionalidade);
+        List<Autor> resultado = service.pesquisaByExample(nome, nacionalidade);
         List<AutorDTO> lista = resultado
                 .stream()
                 .map(autor -> new AutorDTO(
