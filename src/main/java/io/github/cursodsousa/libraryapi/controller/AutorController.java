@@ -27,7 +27,7 @@ public class AutorController {
     private final AutorService service;
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor) {
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor) { // Validation (lógica no AutorDTO) usamos @Valid para serem aplicadas as validations
         try {
             var autorEntidade = autor.mapearParaAutor(); // Mapeia DTO para a entidade
             service.salvar(autorEntidade); // Salva entidade, a partir daqui, a entidade tem um id
@@ -101,7 +101,8 @@ public class AutorController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> atualizar(
             @PathVariable String id,
-            @RequestBody AutorDTO dto) {
+            @RequestBody @Valid AutorDTO dto // Validation (lógica no AutorDTO) usamos @Valid para serem aplicadas as validations
+    ) {
 
         try {
             var idAutor = UUID.fromString(id);
