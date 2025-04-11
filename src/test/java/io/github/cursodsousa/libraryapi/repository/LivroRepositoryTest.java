@@ -92,7 +92,6 @@ class LivroRepositoryTest {
         livroRepository.save(livroParaAtualizar);
     }
 
-
     @Test
     void deletar() {
         UUID id = UUID.fromString("2230ee89-d961-4d24-a073-df3315ee7202");
@@ -153,53 +152,53 @@ class LivroRepositoryTest {
 
     // ########## JPQL @Query Tests ###################
     @Test
-    void listarLivrosComQueryJPQL(){
+    void listarLivrosComQueryJPQL() {
         var resultado = livroRepository.listarLivrosOrdenadoPorTituloAndPreco();
         resultado.forEach(System.out::println);
     }
 
     // Testando JOIN com JPQL
     @Test
-    void listarAutoresDosLivros(){
+    void listarAutoresDosLivros() {
         var resultado = livroRepository.listarAutoresDosLivros();
         resultado.forEach(System.out::println);
     }
+
     /* QUERY METHODS */
     @Test
-    void listarDistinctTitulosLivros(){
+    void listarDistinctTitulosLivros() {
         var resultado = livroRepository.listarNomesDiferentesLivros();
         resultado.forEach(System.out::println);
     }
 
     @Test
-    void listarGenerosDeLivrosAutoresBrasileiros(){
+    void listarGenerosDeLivrosAutoresBrasileiros() {
         var resultado = livroRepository.listarGenerosAutoresBrasileiros();
         resultado.forEach(System.out::println);
     }
 
     /* QUERY PARAMETERS , NAMED and POSITIONAL */
     @Test
-    void listarPorGeneroQueryNamedParameters(){
+    void listarPorGeneroQueryNamedParameters() {
         var resultado = livroRepository.findByGeneroNamedParameters(GeneroLivro.PROGRAMACAO, "preco");
         resultado.forEach(System.out::println);
     }
 
     @Test
-    void listarPorGeneroQueryPositionalParameters(){
+    void listarPorGeneroQueryPositionalParameters() {
         var resultado = livroRepository.findByGeneroPositionalParameters(GeneroLivro.PROGRAMACAO, "preco");
         resultado.forEach(System.out::println);
     }
 
     /* DELETE AND UPDATE com QUERY */
     @Test
-    void deletarPorGeneroTest(){
+    void deletarPorGeneroTest() {
         livroRepository.deleteByGenero(GeneroLivro.CIENCIA);
     }
 
     @Test
-    void updateDataPublicacaoTest(){
+    void updateDataPublicacaoTest() {
         livroRepository.updateDataPublicacao(LocalDate.of(2000, 1, 1));
     }
-
 
 }

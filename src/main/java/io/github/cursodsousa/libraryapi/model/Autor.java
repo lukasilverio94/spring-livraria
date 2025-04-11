@@ -18,10 +18,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString(exclude = "livros")
-
-@EntityListeners(AuditingEntityListener.class) //vai ficar escutando toda vez que fizer alguma operacao nessa entidade
+@EntityListeners(AuditingEntityListener.class) // vai ficar escutando toda vez que fizer alguma operacao nessa entidade
 // e vai observar se tem aquelas anotations ("CreatedDate" ou "ModifiedDate")
-// Pra funcionar o `@EntityListeners`, temos que ir na Main Application e adicinar @EnableJpaAuditing
+// Pra funcionar o `@EntityListeners`, temos que ir na Main Application e
+// adicinar @EnableJpaAuditing
 public class Autor {
 
     @Id
@@ -40,11 +40,10 @@ public class Autor {
 
     // Relacao com Livros. Um autor pode ter muitos livros, entao:
     // Primeiro (One) se refere a Entidade atual (Autor) e Many a Livro.
-    @OneToMany(//cascade = CascadeType.ALL)
-            fetch = FetchType.LAZY,
-            mappedBy = "autor")
+    @OneToMany(// cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY, mappedBy = "autor")
     private List<Livro> livros;
-    // @OneToMany por padrao tem  fetch = "FetchType.LAZY"
+    // @OneToMany por padrao tem fetch = "FetchType.LAZY"
 
     @CreatedDate
     @Column(name = "data_cadastro")
