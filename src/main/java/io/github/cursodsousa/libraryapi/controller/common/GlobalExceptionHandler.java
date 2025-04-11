@@ -1,7 +1,7 @@
 package io.github.cursodsousa.libraryapi.controller.common;
 
-import io.github.cursodsousa.libraryapi.dto.ErroCampo;
-import io.github.cursodsousa.libraryapi.dto.ErroResposta;
+import io.github.cursodsousa.libraryapi.controller.dto.ErroCampo;
+import io.github.cursodsousa.libraryapi.controller.dto.ErroResposta;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,4 +1,4 @@
-package io.github.cursodsousa.libraryapi.dto;
+package io.github.cursodsousa.libraryapi.controller.dto;
 
 import org.springframework.http.HttpStatus;
 

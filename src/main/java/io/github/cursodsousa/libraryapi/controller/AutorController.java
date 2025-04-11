@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/autores")
 @RequiredArgsConstructor
 // http://localhost:8080/autores
-public class AutorController {
+public class AutorController implements GenericController {
 
     private final AutorService service;
     private final AutorMapper mapper;
@@ -33,15 +33,7 @@ public class AutorController {
         try {
             var autor = mapper.toEntity(dto); // Mapeia DTO para a entidade
             service.salvar(autor); // Salva entidade, a partir daqui, a entidade tem um id
-
-            // builder de components URI
-            // http://localhost:8080/autores/:id
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(autor.getId())
-                    .toUri();
-            // retorna o 201(CREATED) junto ao location que construímos acima, depois precisamos usar .build()
+            URI location = gerarHeaderLocation(autor.getId());
             return ResponseEntity.created(location).build();
         } catch (RegistroDuplicadoException e) {
             var erroDTO = ErroResposta.conflito(e.getMessage());
