@@ -10,7 +10,7 @@ public record ResultadoPesquisaLivroDTO(
         UUID id,
         String isbn,
         String titulo,
-        LocalDate dataPublicacal,
+        LocalDate dataPublicacao,
         GeneroLivro genero,
         BigDecimal preco,
         AutorDTO autor) {

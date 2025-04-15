@@ -2,6 +2,8 @@ package io.github.cursodsousa.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
@@ -15,7 +17,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "livro")
-@Data
+@Getter
+@Setter
 @ToString(exclude = "autor")
 @EntityListeners(AuditingEntityListener.class)
 public class Livro {
