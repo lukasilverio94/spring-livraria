@@ -1,5 +1,6 @@
 package io.github.cursodsousa.libraryapi.validator;
 
+import io.github.cursodsousa.libraryapi.exceptions.CampoPrecoInvalidoException;
 import io.github.cursodsousa.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.cursodsousa.libraryapi.model.Livro;
 import io.github.cursodsousa.libraryapi.repository.LivroRepository;
@@ -12,12 +13,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LivroValidator {
 
+    // constante para data a partir desse ano, o preco vai ser obrigatório para validar
+    private static final int ANO_EXIGENCIA_PRECO = 2020;
+
     private final LivroRepository repository;
 
     public void validar(Livro livro) {
         if (existeLivroComIsbn(livro)) {
             throw new RegistroDuplicadoException("ISBN já cadastrado");
         }
+
+        if (isPrecoObrigatorioNull(livro)){
+            throw new CampoPrecoInvalidoException(
+                    "preco", "Para livros com ano de publicacao a partir de 2020, o preco é obrigatório");
+        }
+    }
+
+    private boolean isPrecoObrigatorioNull(Livro livro) {
+        return livro.getPreco() == null &&
+                livro.getDataPublicacao().getYear() >= ANO_EXIGENCIA_PRECO;
     }
 
     private boolean existeLivroComIsbn(Livro livro) {

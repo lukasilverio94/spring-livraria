@@ -2,6 +2,7 @@ package io.github.cursodsousa.libraryapi.controller.common;
 
 import io.github.cursodsousa.libraryapi.controller.dto.ErroCampo;
 import io.github.cursodsousa.libraryapi.controller.dto.ErroResposta;
+import io.github.cursodsousa.libraryapi.exceptions.CampoPrecoInvalidoException;
 import io.github.cursodsousa.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.cursodsousa.libraryapi.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,10 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(fe -> new ErroCampo(fe.getField(), fe.getDefaultMessage()))
                 .collect(Collectors.toList());
-        return new ErroResposta(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Error", listaDeErros);
+        return new ErroResposta(
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Validation Error",
+                listaDeErros);
     }
 
     // Tratar RegistroDuplicadoException
@@ -47,6 +51,17 @@ public class GlobalExceptionHandler {
         return ErroResposta.respostaPadrao(e.getMessage());
     }
 
+    // Campo preco obrigatório a partir de dado ano
+    @ExceptionHandler(CampoPrecoInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroResposta handleCampoPrecoInvalidoException(CampoPrecoInvalidoException e){
+        return new ErroResposta(
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro de validacao",
+                List.of(new ErroCampo(e.getCampo(), e.getMessage()))
+        );
+    }
+
     // Erros nao tratados (500)
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -56,4 +71,5 @@ public class GlobalExceptionHandler {
                 "Ocorreu um erro inesperado. Entre em contato com a admin",
                 List.of());
     }
+
 }
