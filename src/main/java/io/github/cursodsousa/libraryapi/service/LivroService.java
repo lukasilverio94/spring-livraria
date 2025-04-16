@@ -5,10 +5,12 @@ import io.github.cursodsousa.libraryapi.model.Livro;
 import io.github.cursodsousa.libraryapi.repository.LivroRepository;
 import io.github.cursodsousa.libraryapi.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,25 +38,15 @@ public class LivroService {
 
     // essa pesquisa aceita filtros
     // Query Params: isbn, titulo, nome autor, genero, ano de publicacao
-    public List<Livro> pesquisa(
+    public Page<Livro> pesquisa(
             String isbn,
             String titulo,
             String nomeAutor,
             GeneroLivro genero,
-            Integer anoPublicacao) {
+            Integer anoPublicacao,
+            Integer pagina,
+            Integer tamanhoPagina) {
 
-        // select * from livro where isbn = :isbn and nomeAutor = ....
-        // depende do que vai querer ser filtrado (aqui ainda ja sabemos quais campos vao ser filtrados)
-//        Specification<Livro> specs = Specification
-//                .where(LivroSpecifications.isbnEqual(isbn))
-//                .and(LivroSpecifications.tituloLike(titulo))
-//                .and(LivroSpecifications.generoEqual(genero));
-
-
-        // E caso nao sabemos os campos, podemos fazer o seguinte
-        // Aqui vai filtrar baseado no que foi passado mas ainda nao sabemos
-        // Usuario poderia filtrar por isbn, titulo, nomeAutor, genero, dataPublicacao
-        // select * from livro where 0 = 0
         Specification<Livro> specs =
                 Specification.where((root, query, cb) -> cb.conjunction()
         );
@@ -80,7 +72,10 @@ public class LivroService {
             specs = specs.and(anoPublicacaoEqual(anoPublicacao));
         }
 
-        return repository.findAll(specs);
+        // add pagination logic
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+        return repository.findAll(specs, pageRequest);
     }
 
     public void atualizar(Livro livro) {
