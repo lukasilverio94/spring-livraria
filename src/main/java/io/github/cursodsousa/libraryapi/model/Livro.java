@@ -25,7 +25,7 @@ public class Livro {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "isbn", length = 20, nullable = false)
@@ -58,5 +58,13 @@ public class Livro {
 
     @Column(name = "id_usuario")
     private UUID idUsuario;
+
+    // This method ensures that the UUID is generated before persisting
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID(); // Generate UUID if it's not set
+        }
+    }
 
 }
