@@ -24,7 +24,13 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) // disabling csrf (DON'T DO IT ON PRODUCTION!!!)
                 .formLogin(Customizer.withDefaults()) // default form
                 .httpBasic(Customizer.withDefaults()) // in case want use postman or other app to comunicate with this server
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("/login/**").permitAll();
+                    authorize.requestMatchers("/autores/**").hasRole("ADMIN");
+                    authorize.requestMatchers("/livros/**").hasAnyRole("USER", "ADMIN");
+                    authorize.anyRequest().authenticated(); // any rule after this definition it will not be applied (define all in the top first)
+                })
+
                 .build();
     }
 
@@ -35,13 +41,13 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user1  = User.builder()
+        UserDetails user1 = User.builder()
                 .username("user")
                 .password(encoder.encode("123"))
                 .roles("USER")
                 .build();
 
-        UserDetails user2  = User.builder()
+        UserDetails user2 = User.builder()
                 .username("admin")
                 .password(encoder.encode("321"))
                 .roles("ADMIN")
